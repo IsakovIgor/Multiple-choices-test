@@ -1,0 +1,48 @@
+version: '3.9'
+
+networks:
+  multiple-choices-test:
+    driver: bridge
+    name: multiple-choices-test
+
+services:
+  multiple-choices-test:
+    container_name: multiple-choices-test
+    build:
+        context: .docker/app
+        args:
+          PHP_VERSION: ${PHP_VERSION:-8.2.10}
+    volumes:
+      - ".:/var/www/multiple-choices-test"
+    depends_on:
+      - psql
+    networks:
+      - multiple-choices-test
+
+  multiple-choices-test-nginx:
+    container_name: multiple-choices-test-nginx
+    image: nginx:1.23-alpine
+    ports:
+      - "${EXTERNAL_NGINX_PORT:-8080}:8080"
+    volumes:
+      - ".:/var/www/multiple-choices-test"
+      - ".docker/nginx/multiple-choices-test.conf:/etc/nginx/conf.d/default.conf"
+    depends_on:
+      - multiple-choices-test
+    networks:
+      - multiple-choices-test
+
+  psql:
+    container_name: psql
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-test}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-test}
+      POSTGRES_DB: ${POSTGRES_DB:-test}
+      PGDATA: /data/postgres
+    volumes:
+      - ".docker/psql:/data/postgres"
+    ports:
+      - "${EXTERNAL_PSQL_PORT:-5432}:5432"
+    networks:
+      - multiple-choices-test

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <h3>Questions</h3>
+                {{ form(form) }}
+            </div>
+
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <h3>Successfully questions</h3>
+                {% if successfulQuestions|length > 0 %}
+                    <ul>
+                        {% for q in successfulQuestions %}
+                            <li>{{ q }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <h3>Failed questions</h3>
+                {% if failedQuestions|length > 0 %}
+                    <ul>
+                        {% for q in failedQuestions %}
+                            <li>{{ q }}</li>
+                        {% endfor %}
+                    </ul>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

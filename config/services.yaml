@@ -1,0 +1,32 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Command\FillDatabase:
+        class: App\Command\FillDatabase
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $storage: '@App\Storage\Filesystem'
+            $questionsPath: '%kernel.project_dir%/data/db.json'
+
+    App\Controller\IndexController:
+        class: App\Controller\IndexController
+
+    app.form.test:
+        class: App\Form\Test
+        arguments:
+            $mutator: '@App\Form\FormDataMutator\FormDataShuffle'
