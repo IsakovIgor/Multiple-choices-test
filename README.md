@@ -2,11 +2,12 @@
 #### Install
 - `cd /var/www && git clone https://github.com/IsakovIgor/Multiple-choices-test`
 (you can use another path for project instead of /var/www)
-- `cd multiple-choices-test`
+- `cd Multiple-choices-test`
 - `cp .env.dist .env` and choose port for psql if 5432 is locked (don't forget about EXTERNAL_PSQL_PORT)
 - choose EXTERNAL_NGINX_PORT if 8080 is locked in your pc
 - `docker compose up -d` or `docker-compose up -d` for old docker versions
 - `docker compose exec multiple-choices-test sh`
+- `composer install`
 - `php ./bin/console doctrine:migrations:migrate`
 - `php ./bin/console app:db:fill`
 - `php ./vendor/bin/phpunit` for testing
